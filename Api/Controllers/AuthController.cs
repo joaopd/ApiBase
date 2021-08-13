@@ -2,27 +2,29 @@
 using AutoMapper;
 using CrossCutting.Config.Token;
 using Dominio.Entidades;
+using Dominio.Enum;
 using Dominio.UoW;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
     [Authorize]
     [Route("v1/account")]
-    public class HomeController : ControllerBase
+    public class AuthController : ControllerBase
     {
         private IUnitOfWork _uow;
         private IMapper _mapper;
 
-        public HomeController(IUnitOfWork uow,
+        public AuthController(IUnitOfWork uow,
                               IMapper mapper)
         {
             _uow = uow;
             _mapper = mapper;
-        }
+        }       
 
         [AllowAnonymous]
         [HttpPost("autenticar")]
@@ -45,22 +47,28 @@ namespace Api.Controllers
             };
         }
 
+        [AllowAnonymous]
         [HttpPost("novo-usuario")]
         public async Task<ActionResult<dynamic>> NovoUsuario([FromBody] UsuarioDto usuario)
         {
-            Usuario usuarioMap = _mapper.Map<UsuarioDto, Usuario>(usuario);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            
 
-            Usuario user = (await _uow.RepositorioUsuario.GetList(x => x.Nome == usuarioMap.Nome && x.Senha == usuarioMap.Senha)).FirstOrDefault();
+            var usuarioExistente = (await _uow.RepositorioUsuario.GetList(x => x.Email == usuario.Email)).FirstOrDefault();
 
-            if (user == null)
+            if (usuarioExistente != null)
             {
-                return NotFound(new { message = "Usuario ou senha Invalidos" });
+                return NotFound(new { message = "Email ja cadastrado" });
             }
+
+            var user = new Usuario(usuario.Nome, usuario.Email, usuario.Senha, EnumRole.Usuario);
+
+            var novoUsuario = await _uow.RepositorioUsuario.Create(user);
 
             string token = TokenService.GenerateToken(user);
             return new
             {
-                usuario = _mapper.Map<Usuario, ObterUsuarioDto>(usuarioMap),
+                usuario = _mapper.Map<Usuario, ObterUsuarioDto>(novoUsuario),
                 token = token
             };
         }
