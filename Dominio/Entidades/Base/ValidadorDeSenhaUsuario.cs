@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace Dominio.Entidades.Base
 {
     public class ValidadorDeSenha : ValidationAttribute
-    {
-       
+    {        
+        public ValidadorDeSenha() : base("Senha Fraca:  Por favor, digite uma senha segura...A senha deve ter pelomenos 8 caracteres. Para torná-la mais forte, use letras maiúsculas e minúsculas, números e seimbolos como !?#$& ") { }
         public override bool IsValid(object value)
         {
             int tamanhoMinimo = 8;
