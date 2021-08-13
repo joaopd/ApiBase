@@ -15,7 +15,7 @@ namespace Api.Dto.Usuario
         [Required(ErrorMessage = "Senha é obrigatorio")]
         [ValidadorDeSenha]
         public string Senha { get; set; }
-        
+
         [Required(ErrorMessage = "Confirmar senha é obrigatorio")]
         [Compare(nameof(Senha), ErrorMessage = "Senha nao coincidem")]
         public string ConfirmarSenha { get; set; }

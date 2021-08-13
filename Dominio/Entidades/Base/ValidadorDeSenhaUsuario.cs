@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Dominio.Entidades.Base
 {
     public class ValidadorDeSenha : ValidationAttribute
-    {        
+    {
         public ValidadorDeSenha() : base("Senha Fraca:  Por favor, digite uma senha segura...A senha deve ter pelomenos 8 caracteres. Para torná-la mais forte, use letras maiúsculas e minúsculas, números e seimbolos como !?#$& ") { }
         public override bool IsValid(object value)
         {
@@ -18,7 +13,7 @@ namespace Dominio.Entidades.Base
             int tamanhoMaiusculo = 1;
             int tamanhoNumeros = 1;
             int tamanhoCaracteresEspeciais = 1;
-            String password = value.ToString();
+            string password = value.ToString();
 
             // Definição de letras minusculas
             Regex regTamanhoMinusculo = new Regex("[a - z]");
@@ -33,19 +28,34 @@ namespace Dominio.Entidades.Base
             Regex regCaracteresEspeciais = new Regex("[^a - zA - Z0 - 9]");
 
             // Verificando tamanho minimo
-            if (password.Length < tamanhoMinimo) return false;
+            if (password.Length < tamanhoMinimo)
+            {
+                return false;
+            }
 
             // Verificando caracteres minusculos
-            if (regTamanhoMinusculo.Matches(password).Count < tamanhoMinusculo) return false;
+            if (regTamanhoMinusculo.Matches(password).Count < tamanhoMinusculo)
+            {
+                return false;
+            }
 
             // Verificando caracteres maiusculos
-            if (regTamanhoMaiusculo.Matches(password).Count < tamanhoMaiusculo) return false;
+            if (regTamanhoMaiusculo.Matches(password).Count < tamanhoMaiusculo)
+            {
+                return false;
+            }
 
             // Verificando numeros
-            if (regTamanhoNumeros.Matches(password).Count < tamanhoNumeros) return false;
+            if (regTamanhoNumeros.Matches(password).Count < tamanhoNumeros)
+            {
+                return false;
+            }
 
             // Verificando os diferentes
-            if (regCaracteresEspeciais.Matches(password).Count < tamanhoCaracteresEspeciais) return false;
+            if (regCaracteresEspeciais.Matches(password).Count < tamanhoCaracteresEspeciais)
+            {
+                return false;
+            }
 
             return true;
         }

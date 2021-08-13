@@ -7,7 +7,6 @@ using Dominio.UoW;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Api.Controllers
@@ -24,7 +23,7 @@ namespace Api.Controllers
         {
             _uow = uow;
             _mapper = mapper;
-        }       
+        }
 
         [AllowAnonymous]
         [HttpPost("autenticar")]
@@ -51,19 +50,21 @@ namespace Api.Controllers
         [HttpPost("novo-usuario")]
         public async Task<ActionResult<dynamic>> NovoUsuario([FromBody] UsuarioDto usuario)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            var usuarioExistente = (await _uow.RepositorioUsuario.GetList(x => x.Email == usuario.Email)).FirstOrDefault();
+            Usuario usuarioExistente = (await _uow.RepositorioUsuario.GetList(x => x.Email == usuario.Email)).FirstOrDefault();
 
             if (usuarioExistente != null)
             {
                 return NotFound(new { message = "Email ja cadastrado" });
             }
 
-            var user = new Usuario(usuario.Nome, usuario.Email, usuario.Senha, EnumRole.Usuario);
+            Usuario user = new Usuario(usuario.Nome, usuario.Email, usuario.Senha, EnumRole.Usuario);
 
-            var novoUsuario = await _uow.RepositorioUsuario.Create(user);
+            Usuario novoUsuario = await _uow.RepositorioUsuario.Create(user);
 
             string token = TokenService.GenerateToken(user);
             return new
