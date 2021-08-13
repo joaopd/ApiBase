@@ -28,14 +28,17 @@ namespace Data.Migrations
                     b.Property<DateTime>("DataDeRegistro")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("Excluido")
                         .HasColumnType("bit");
 
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.Property<string>("Senha")
                         .HasColumnType("nvarchar(max)");

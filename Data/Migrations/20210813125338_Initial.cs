@@ -13,8 +13,9 @@ namespace Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Senha = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Role = table.Column<int>(type: "int", nullable: false),
                     Excluido = table.Column<bool>(type: "bit", nullable: false),
                     DataDeRegistro = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },

@@ -1,4 +1,5 @@
 ﻿using Dominio.Entidades.Base;
+using Dominio.Enum;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -7,10 +8,12 @@ namespace Dominio.Entidades
     public class Usuario : EntidadeBase
     {
         public string Nome { get; private set; }
+        public string Email { get; private set; }
         public string Senha { get; private set; }
-        public string Role { get; private set; }
-        public Usuario(string nome, string senha, string role)
+        public EnumRole Role { get; private set; }
+        public Usuario(string nome, string email, string senha, EnumRole role)
         {
+            Email = email;
             Nome = nome;
             Senha = CriarHash(senha);
             Role = role;
@@ -29,6 +32,11 @@ namespace Dominio.Entidades
                 sb.Append(hash[i].ToString("X2"));
             }
             return sb.ToString();
+        }
+
+        public void AtualizarEmail(string email)
+        {
+            Email = email;
         }
     }
 }
