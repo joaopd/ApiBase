@@ -57,7 +57,7 @@ namespace Data.Repositorios
         }
 
         public async Task<List<T>> GetList(Expression<Func<T, bool>> expression = null,
-            Func<System.Linq.IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             IQueryable<T> qry = _dataSet.AsNoTracking();
 

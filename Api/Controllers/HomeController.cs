@@ -28,15 +28,15 @@ namespace Api.Controllers
         [HttpPost("autenticar")]
         public async Task<ActionResult<dynamic>> Autenticacao([FromBody] UsuarioDto usuario)
         {
-            var usuarioMap = _mapper.Map<UsuarioDto, Usuario>(usuario);
+            Usuario usuarioMap = _mapper.Map<UsuarioDto, Usuario>(usuario);
 
-            var user = (await _uow.RepositorioUsuario.GetList(x => x.Nome == usuarioMap.Nome && x.Senha == usuarioMap.Senha)).FirstOrDefault();
+            Usuario user = (await _uow.RepositorioUsuario.GetList(x => x.Nome == usuarioMap.Nome && x.Senha == usuarioMap.Senha)).FirstOrDefault();
 
             if (user == null)
             {
                 return NotFound(new { message = "Usuario ou senha Invalidos" });
             }
-            
+
             string token = TokenService.GenerateToken(user);
             return new
             {
@@ -44,13 +44,13 @@ namespace Api.Controllers
                 token = token
             };
         }
-        
+
         [HttpPost("novo-usuario")]
         public async Task<ActionResult<dynamic>> NovoUsuario([FromBody] UsuarioDto usuario)
         {
-            var usuarioMap = _mapper.Map<UsuarioDto, Usuario>(usuario);
+            Usuario usuarioMap = _mapper.Map<UsuarioDto, Usuario>(usuario);
 
-            var user = (await _uow.RepositorioUsuario.GetList(x => x.Nome == usuarioMap.Nome && x.Senha == usuarioMap.Senha)).FirstOrDefault();
+            Usuario user = (await _uow.RepositorioUsuario.GetList(x => x.Nome == usuarioMap.Nome && x.Senha == usuarioMap.Senha)).FirstOrDefault();
 
             if (user == null)
             {
